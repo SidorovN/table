@@ -29,6 +29,7 @@ export default {
   ** Global CSS
   */
   css: [
+    '@/static/main.css',
   ],
   /*
   ** Plugins to load before mounting the App
@@ -52,8 +53,14 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
+    '@nuxtjs/pwa',  
+    '@nuxtjs/style-resources',
   ],
+  styleResources: {
+   scss: [
+    '~/static/variables.scss', // путь к вашему файлу
+   ],
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

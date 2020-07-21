@@ -1,73 +1,83 @@
 <template>
-  <table class="table">
-    <tr class="table__row table__row_type_heading">
-      <th class="table__cell table__cell_type_heading"><input type="checkbox"></th>
-      <th class="table__cell table__cell_type_heading">Product (100g serving)</th>
-      <th class="table__cell table__cell_type_heading">Calories</th>
-      <th class="table__cell table__cell_type_heading">Fat (g)</th>
-      <th class="table__cell table__cell_type_heading">Carbs (g)</th>
-      <th class="table__cell table__cell_type_heading">Protein (g)</th>
-    </tr>
-    <tr class="table__row">
-      <td class="table__cell"><input type="checkbox"></td>
-      <td class="table__cell">Product (100g serving)</td>
-      <td class="table__cell">Calories</td>
-      <td class="table__cell">Fat (g)</td>
-      <td class="table__cell">Carbs (g)</td>
-      <td class="table__cell">Protein (g)</td>
-    </tr>
-    <tr class="table__row">
-      <td class="table__cell"><input type="checkbox"></td>
-      <td class="table__cell">Product (100g serving)</td>
-      <td class="table__cell">Calories</td>
-      <td class="table__cell">Fat (g)</td>
-      <td class="table__cell">Carbs (g)</td>
-      <td class="table__cell">Protein (g)</td>
-    </tr>
-    <tr class="table__row">
-      <td class="table__cell"><input type="checkbox"></td>
-      <td class="table__cell">Product (100g serving)</td>
-      <td class="table__cell">Calories</td>
-      <td class="table__cell">Fat (g)</td>
-      <td class="table__cell">Carbs (g)</td>
-      <td class="table__cell">Protein (g)</td>
-    </tr>
-    <tr class="table__row">
-      <td class="table__cell"><input type="checkbox"></td>
-      <td class="table__cell">Product (100g serving)</td>
-      <td class="table__cell">Calories</td>
-      <td class="table__cell">Fat (g)</td>
-      <td class="table__cell">Carbs (g)</td>
-      <td class="table__cell">Protein (g)</td>
-    </tr>
-    <tr class="table__row">
-      <td class="table__cell"><input type="checkbox"></td>
-      <td class="table__cell">Product (100g serving)</td>
-      <td class="table__cell">Calories</td>
-      <td class="table__cell">Fat (g)</td>
-      <td class="table__cell">Carbs (g)</td>
-      <td class="table__cell">Protein (g)</td>
-    </tr>
-    <tr class="table__row">
-      <td class="table__cell"><input type="checkbox"></td>
-      <td class="table__cell">Product (100g serving)</td>
-      <td class="table__cell">Calories</td>
-      <td class="table__cell">Fat (g)</td>
-      <td class="table__cell">Carbs (g)</td>
-      <td class="table__cell">Protein (g)</td>
-    </tr>
+<div class="">
+    <Toolbar/>
+    <table class="table">
+      <tr class="table__row table__row_type_heading">
+        <th class="table__cell table__cell_type_heading"><Checkbox/></th>
+        <th class="table__cell table__cell_type_heading">Product (100g serving)</th>
+        <th class="table__cell table__cell_type_heading">Calories</th>
+        <th class="table__cell table__cell_type_heading">Fat (g)</th>
+        <th class="table__cell table__cell_type_heading">Carbs (g)</th>
+        <th class="table__cell table__cell_type_heading">Protein (g)</th>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell"><input type="checkbox"></td>
+        <td class="table__cell">Product (100g serving)</td>
+        <td class="table__cell">Calories</td>
+        <td class="table__cell">Fat (g)</td>
+        <td class="table__cell">Carbs (g)</td>
+        <td class="table__cell">Protein (g)</td>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell"><input type="checkbox"></td>
+        <td class="table__cell">Product (100g serving)</td>
+        <td class="table__cell">Calories</td>
+        <td class="table__cell">Fat (g)</td>
+        <td class="table__cell">Carbs (g)</td>
+        <td class="table__cell">Protein (g)</td>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell"><input type="checkbox"></td>
+        <td class="table__cell">Product (100g serving)</td>
+        <td class="table__cell">Calories</td>
+        <td class="table__cell">Fat (g)</td>
+        <td class="table__cell">Carbs (g)</td>
+        <td class="table__cell">Protein (g)</td>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell"><input type="checkbox"></td>
+        <td class="table__cell">Product (100g serving)</td>
+        <td class="table__cell">Calories</td>
+        <td class="table__cell">Fat (g)</td>
+        <td class="table__cell">Carbs (g)</td>
+        <td class="table__cell">Protein (g)</td>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell"><input type="checkbox"></td>
+        <td class="table__cell">Product (100g serving)</td>
+        <td class="table__cell">Calories</td>
+        <td class="table__cell">Fat (g)</td>
+        <td class="table__cell">Carbs (g)</td>
+        <td class="table__cell">Protein (g)</td>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell"><input type="checkbox"></td>
+        <td class="table__cell">Product (100g serving)</td>
+        <td class="table__cell">Calories</td>
+        <td class="table__cell">Fat (g)</td>
+        <td class="table__cell">Carbs (g)</td>
+        <td class="table__cell">Protein (g)</td>
+      </tr>
 
-  </table>
+    </table>
+  </div>
 </template>
 
 <script>
+import Radio from '@/components/ui/Radio'
+import Checkbox from '@/components/ui/Checkbox'
+import Toolbar from '@/components/Toolbar'
   export default {
-    
+    components: {
+      Radio,
+      Checkbox,
+      Toolbar,
+
+    }
   }
 </script>
 
 <style lang="scss" scoped>
-
 .table {
   display: block;
   margin: 0 auto;

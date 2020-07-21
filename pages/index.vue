@@ -14,5 +14,8 @@ import Table from '@/components/Table.vue'
 </script>
 
 <style lang="scss" scoped>
+body {
+  font-family: Source Sans Pro;
+  }
 
 </style>
