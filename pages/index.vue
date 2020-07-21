@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <Table/>
   </div>
 </template>
@@ -17,5 +17,13 @@ import Table from '@/components/Table.vue'
 body {
   font-family: Source Sans Pro;
   }
+
+.container {
+  
+  display: block;
+  margin: 0 auto;
+  max-width: 1140px;
+
+}
 
 </style>
