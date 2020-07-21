@@ -78,11 +78,9 @@ import Toolbar from '@/components/Toolbar'
 </script>
 
 <style lang="scss" scoped>
-.table {
-  display: block;
-  margin: 0 auto;
-  max-width: 1140px;
-
+.table {  
+  font-size: $font-size;
+  line-height: $line-height;
   &__row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
