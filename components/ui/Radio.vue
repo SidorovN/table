@@ -1,7 +1,8 @@
 <template>
   <div class="radio">
     <label class="radio__label">
-      <input type="radio" class="radio__button visually-hidden"
+      <input type="radio" class="radio__button visually-hidden" :value="value"
+      @change="$emit('radio-change',$event)"
       :name="name"
       :checked="checked"/>
       <p class="radio__text"><slot>Label</slot></p>
@@ -14,7 +15,8 @@
   export default {
     props: {
       checked: Boolean,
-      name: String
+      name: String,
+      value: String,
 
     }
   }

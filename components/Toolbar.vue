@@ -2,20 +2,20 @@
   <div class="toolbar">
     <div class="toolbar__group">
       <p class="toolbar__title">Sort by:</p>
-      <Radio name="sort">Product (100g serving)</Radio>
-      <Radio name="sort">Calories</Radio>
-      <Radio name="sort">Fat (g)</Radio>
-      <Radio name="sort">Carbs (g)</Radio>
-      <Radio name="sort">Protein (g)</Radio>
+      <Radio @radio-change="sort" name="sort" :checked="true" value="product">Product (100g serving)</Radio>
+      <Radio @radio-change="sort" name="sort" value="calories">Calories</Radio>
+      <Radio @radio-change="sort" name="sort" value="fat">Fat (g)</Radio>
+      <Radio @radio-change="sort" name="sort" value="carbs">Carbs (g)</Radio>
+      <Radio @radio-change="sort" name="sort" value="protein">Protein (g)</Radio>
     </div>
     <div class="toolbar__group">
       <button class="toolbar__button" disabled>
         {{`Delete ${selectedDelete()}`}}
       </button>      
-      <Dropdown class="dropdown" disabled :title="`${perPage} Per page`">
-          <li class="dropdown__item"><Radio name="per-page">10</Radio></li>
-          <li class="dropdown__item"><Radio name="per-page">15</Radio></li>
-          <li class="dropdown__item"><Radio name="per-page">25</Radio></li>
+      <Dropdown class="dropdown" disabled :title="`${getRange} Per page`">
+          <li class="dropdown__item"><Radio @radio-change="setRange" value="10" :checked="true" name="per-page">10</Radio></li>
+          <li class="dropdown__item"><Radio @radio-change="setRange" value="15" name="per-page">15</Radio></li>
+          <li class="dropdown__item"><Radio @radio-change="setRange" value="25" name="per-page">25</Radio></li>
       </Dropdown>
         <div class="pagination">
           <button @click="prevPage">Prev</button>
@@ -47,16 +47,23 @@ import Dropdown from '@/components/ui/Dropdown'
     ],
     data(){
       return {
-        perPage: 10,
       }
     },
     methods: {
-      selectedColumns(){
+      selectedColumns() {
         return 3
       },
-      selectedDelete(){
+      selectedDelete() {
         return 3
-      },      
+      },  
+      sort(evt){
+        const param = evt.target.value
+        this.$store.dispatch('table/sortTable',{ data: param })
+      }, 
+      setRange(evt){
+        const range = evt.target.value
+        this.$store.dispatch('table/setRange', +range )
+      },
       nextPage() {
         this.setPagination(this.getFirst + this.getRange, this.getRange)
       },
@@ -64,7 +71,7 @@ import Dropdown from '@/components/ui/Dropdown'
         this.setPagination(this.getFirst - this.getRange, this.getRange)
       },
       setPagination(first, range) {
-        this.$store.dispatch('table/setPagination',{ first : first, range: 10})
+        this.$store.dispatch('table/setPagination',{ first : first, range: range})
       }
     },
     computed: {      
@@ -75,6 +82,7 @@ import Dropdown from '@/components/ui/Dropdown'
       },
       getRange(){
         const { table } = this.$store.state;
+        console.log(table.pagination.range  )
         return table.pagination.range;
       },
     },

@@ -30,7 +30,7 @@ import Checkbox from '@/components/ui/Checkbox'
   position: relative;
   &__list {
     width: 100%;
-    display: none;
+    // display: none;
     list-style: none;
     padding: 0;
     position: absolute;
