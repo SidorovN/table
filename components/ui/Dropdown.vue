@@ -5,7 +5,7 @@
         {{title}}
       </p> <img src="@/static/images/arrow.svg" alt="Открыть список" class="dropdown__img">
     </button>    
-      <ul class="dropdown__list dropdown__list_opened">
+      <ul class="dropdown__list">
         <slot></slot>
       </ul>
   </div>
