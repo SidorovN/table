@@ -14,18 +14,47 @@ export const actions = {
         table: res
       })
     })    
+    .then(res=>{
+      commit('sortTable', { 
+        data: 'product' 
+      })
+    }) 
   },
   setPagination({ commit }, {first , range}) {
     commit('setPagination', {
       first,
       range
     })
+  },  
+  sortTable({ commit }, { data }) {
+    commit('sortTable', { data })
+  },  
+  setRange({ commit },  range ) {
+    commit('setRange',  range )
   }
 }  
 
 export const mutations = {
   setState(state,  data ) {
     state.table = data.table;
+  },
+  setRange(state,  data ) {
+    state.pagination.range = data;    
+  },
+  sortTable(state, data ) {
+    console.log(data)
+    console.log(typeof state.table[0][data.data] === 'string')
+    typeof state.table[0][data.data] === 'string' ?
+    state.table.sort((a,b)=> {
+       
+        if (a[data.data] > b[data.data]) {
+          return 1;
+        } else if (a[data.data] < b[data.data]) {
+          return -1;
+        } 
+        return 0;
+    }) :
+    state.table.sort((a,b)=> a[data.data]- b[data.data]) 
   },
   setPagination(state, data) {
     state.pagination = data
@@ -44,47 +73,3 @@ export const getters = {
   },
 
 };
-
-// export const mutations = {
-//   saveAnswer(state, { answer, currentQuestion }) {
-//     state.answers[state.questions[currentQuestion].name] = answer;
-//   },
-//   setCurrentQuestion(state, { currentQuestion }) {
-//     state.currentQuestion = currentQuestion;
-//   },
-//   setQuestions(state, questions) {
-//     state.questions = questions;
-//   },
-//   resetAnswers(state) {
-//     state.answers = {};
-//   },
-// };
-// export const getters = {
-//   getNumberAllQuestions(state) {
-//     return Object.keys(state.questions).length;
-//   },
-// };
-// export const actions = {
-//   async nextQuestion({ commit, state }, { answer }) {
-//     const { currentQuestion } = state;
-//     await commit('saveAnswer', { answer, currentQuestion });
-
-//     if (currentQuestion < getters.getNumberAllQuestions(state)) {
-//       await commit('setCurrentQuestion', {
-//         currentQuestion: currentQuestion + 1,
-//       });
-//     }
-//   },
-//   prevQuestion({ commit, state }) {
-//     const { currentQuestion } = state;
-//     if (currentQuestion === 1) {
-//       return;
-//     }
-//     commit('setCurrentQuestion', { currentQuestion: currentQuestion - 1 });
-//   },
-//   async SEND_QUIZ({ commit, state }) {
-//     await this.$axios.$post('forms/stories', state.answers);
-//     await commit('setCurrentQuestion', { currentQuestion: 1 });
-//     await commit('resetAnswers');
-//   },
-// };

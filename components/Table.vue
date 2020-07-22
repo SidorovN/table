@@ -45,11 +45,6 @@ import Toolbar from '@/components/Toolbar'
     props: [
       'table',
     ],
-    beforeMount(){
-      // if(this.dataToShow.length === 0) {
-      //   this.setData()
-      // }
-    },
     computed: {  
       setData() {
         return this.table.slice(this.getFirst - 1, this.getFirst + this.getRange - 1)
