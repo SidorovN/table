@@ -18,9 +18,9 @@
           <li class="dropdown__item"><Radio name="per-page">25</Radio></li>
       </Dropdown>
         <div class="pagination">
-          <button>Next</button>
-            <p class="pagination__text">{{`${firstItem}-${lastItem} of ${totalItems}`}}</p>
-          <button>Prev</button>
+          <button @click="prevPage">Prev</button>
+            <p class="pagination__text">{{`${getFirst}-${getFirst + getRange - 1} of ${totalItems}`}}</p>
+          <button @click="nextPage">Next</button>
         </div>
       <Dropdown class="dropdown" disabled :title="`${selectedColumns()} columns selected`">
           <li class="dropdown__item"><Checkbox>All</Checkbox></li>
@@ -40,13 +40,14 @@ import Dropdown from '@/components/ui/Dropdown'
     components: {
       Dropdown,
     },
+    props: [
+      'totalItems',
+      'firstItem',
+      'lastItem',
+    ],
     data(){
       return {
         perPage: 10,
-        firstItem: 10,
-        lastItem: 10,
-        totalItems: 10,
-
       }
     },
     methods: {
@@ -56,6 +57,25 @@ import Dropdown from '@/components/ui/Dropdown'
       selectedDelete(){
         return "(3)"
       },
+    },
+    computed: {      
+      getFirst(){
+        const { table } = this.$store.state;
+        console.log(table)
+        return table.pagination.first;
+      },
+      getRange(){
+        const { table } = this.$store.state;
+        return table.pagination.range;
+      },
+    },
+    methods: {
+      nextPage(){
+
+      },
+      prevPage(){
+        
+      }
     }
   }
 </script>
