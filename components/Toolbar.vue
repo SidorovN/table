@@ -55,8 +55,17 @@ import Dropdown from '@/components/ui/Dropdown'
         return 3
       },
       selectedDelete(){
-        return "(3)"
+        return 3
+      },      
+      nextPage() {
+        this.setPagination(this.getFirst + this.getRange, this.getRange)
       },
+      prevPage() { 
+        this.setPagination(this.getFirst - this.getRange, this.getRange)
+      },
+      setPagination(first, range) {
+        this.$store.dispatch('table/setPagination',{ first : first, range: 10})
+      }
     },
     computed: {      
       getFirst(){
@@ -69,14 +78,6 @@ import Dropdown from '@/components/ui/Dropdown'
         return table.pagination.range;
       },
     },
-    methods: {
-      nextPage(){
-
-      },
-      prevPage(){
-        
-      }
-    }
   }
 </script>
 

@@ -27,7 +27,6 @@ import Table from '@/components/Table.vue'
         })
         .finally(res=> {
           this.isLoading = false
-          console.log(Object.keys(this.$store.getters['table/getPagination']))
         })
       },
     data() {

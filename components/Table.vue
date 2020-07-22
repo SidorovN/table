@@ -13,7 +13,7 @@
 
         
       <tr class="table__row"
-        v-for="row in dataToShow"
+        v-for="row in setData"
         :key = row.id
       >
         <th class="table__cell table__cell"><Checkbox/></th>
@@ -40,23 +40,29 @@ import Toolbar from '@/components/Toolbar'
     data(){
       return {
         dataToShow: [],
-        first: 1,
-        range: 10
         }
     },
     props: [
       'table',
     ],
     beforeMount(){
-      if(this.dataToShow.length === 0) {
-        this.setData()
-      }
+      // if(this.dataToShow.length === 0) {
+      //   this.setData()
+      // }
     },
-    methods: {
+    computed: {  
       setData() {
-        this.dataToShow = this.table.slice(this.first - 1, this.first + this.range - 1)
-      }
-    }
+        return this.table.slice(this.getFirst - 1, this.getFirst + this.getRange - 1)
+      },   
+      getFirst() {
+        const { table } = this.$store.state;
+        return table.pagination.first;
+      },
+      getRange() {
+        const { table } = this.$store.state;
+        return table.pagination.range;
+      },
+    },
   }
 </script>
 
