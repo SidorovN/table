@@ -21,6 +21,12 @@
     "node-sass": "^4.14.1",
     "nuxt-sass-resources-loader": "^2.0.5",
     "prettier": "^2.0.5",
-    "sass-loader": "^9.0.2"
+    "sass-loader": "^9.0.2",
+    "husky": "^4.2.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "prettier --write './**/*.{js,vue}' && git add ."
+    }
   }
 }
