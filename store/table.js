@@ -37,6 +37,12 @@ export const actions = {
   setRange({ commit }, range) {
     commit('setRange', range)
   },
+  deleteItem({ commit }, id) {
+    return deleteProducts().then((res) => {
+      console.log(id)
+      commit('deleteItem', { id })
+    })
+  },
 }
 
 export const mutations = {
@@ -64,12 +70,12 @@ export const mutations = {
     state.pagination = data
   },
   setColumns(state, data) {
-    console.log(data)
     state.columns = data
-    console.log(state.columns)
   },
-  removeProduct(state, { id }) {
-    state.table = state.filter((el) => el.id === id)
+  deleteItem(state, { id }) {
+    console.log(id)
+    state.table = state.table.filter((el) => id.every((item) => el.id != item))
+    // console.log(state.table)
   },
 }
 

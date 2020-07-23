@@ -14,8 +14,11 @@
       <Radio @radio-change="sort" name="sort" value="iron">Iron (g)</Radio>
     </div>
     <div class="toolbar__group">
-      <button class="toolbar__button" disabled>
-        {{ `Delete ${selected.length}` }}
+      <button v-if="!selected.length" class="toolbar__button" disabled>
+        Delete
+      </button>
+      <button v-else @click="deleteItem(selected)" class="toolbar__button">
+        {{ `Delete (${selected.length})` }}
       </button>
       <Dropdown class="dropdown" disabled :title="`${getRange} Per page`">
         <li class="dropdown__item">
@@ -37,7 +40,7 @@
       <div class="pagination">
         <button @click="prevPage">Prev</button>
         <p class="pagination__text">
-          {{ `${getFirst}-${getFirst + getRange - 1} of ${totalItems}` }}
+          {{ `${getFirst}-${getFirst + getRange - 1} of ${getTotalItems}` }}
         </p>
         <button @click="nextPage">Next</button>
       </div>
@@ -91,12 +94,6 @@ export default {
     }
   },
   methods: {
-    selectedColumns() {
-      return 3
-    },
-    selectedDelete() {
-      return 3
-    },
     changeColumns(evt) {
       const inputs = Array.from(evt.currentTarget.elements)
       const columns = inputs.filter((el) => el.checked).map((el) => el.value)
@@ -118,11 +115,17 @@ export default {
       }
     },
     nextPage() {
-      this.setPagination(this.getFirst + this.getRange, this.getRange)
+      const first =
+        this.getFirst + this.getRange < this.getTotalItems
+          ? this.getFirst + this.getRange
+          : this.getTotalItems - this.getRange
+      this.setPagination(first, this.getRange)
       this.$emit('change-page')
     },
     prevPage() {
-      this.setPagination(this.getFirst - this.getRange, this.getRange)
+      const first =
+        this.getFirst > this.getRange ? this.getFirst - this.getRange : 1
+      this.setPagination(first, this.getRange)
       this.$emit('change-page')
     },
     setPagination(first, range) {
@@ -130,6 +133,20 @@ export default {
         first: first,
         range: range,
       })
+    },
+    deleteItem(id) {
+      console.log(id)
+      this.$store
+        .dispatch('table/deleteItem', id)
+        .then((res) => {
+          this.$emit('change-page')
+        })
+        .catch((res) => {
+          console.log(res)
+        })
+        .finally((res) => {
+          console.log('finally')
+        })
     },
   },
   computed: {
@@ -146,6 +163,10 @@ export default {
       const { table } = this.$store.state
       return table.columns
     },
+    getTotalItems() {
+      const { table } = this.$store.state
+      return table.table.length
+    },
   },
 }
 </script>
@@ -161,7 +182,17 @@ export default {
     display: flex;
   }
   &__button {
+    background-color: $active-bg;
+    color: $active-color;
+    border: 1px solid transparent;
+    border-radius: 2px;
     height: 100%;
+    margin-right: 12px;
+    &:disabled {
+      color: #c6cbd4;
+      background-color: transparent;
+      border: 1px solid #c6cbd4;
+    }
   }
 }
 .pagination {

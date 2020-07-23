@@ -71,7 +71,7 @@
             {{ row.iron }} (g)
           </td>
           <td class="table__cell table__cell_type_button">
-            <button>Delete</button>
+            <button @click="deleteItem">Delete</button>
           </td>
         </tr>
       </div>
@@ -128,10 +128,24 @@ export default {
       this.selectedAll = false
       this.selected = []
     },
+    deleteItem(evt) {
+      const id = evt.target
+        .closest('.table__row')
+        .querySelector('.checkbox__button').value
+      console.log([id])
+      this.$store
+        .dispatch('table/deleteItem', [id])
+        .catch((res) => {
+          console.log(res)
+        })
+        .finally((res) => {
+          console.log('finally')
+        })
+    },
   },
   computed: {
     setData() {
-      return this.table.slice(
+      return this.getTable.slice(
         this.getFirst - 1,
         this.getFirst + this.getRange - 1
       )
@@ -139,6 +153,10 @@ export default {
     getFirst() {
       const { table } = this.$store.state
       return table.pagination.first
+    },
+    getTable() {
+      const { table } = this.$store.state
+      return table.table
     },
     getRange() {
       const { table } = this.$store.state
