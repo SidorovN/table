@@ -29,7 +29,6 @@ export default {
 <style lang="scss" scoped>
 .checkbox {
   @extend %font;
-  display: inline-block;
   &__label {
     cursor: pointer;
     display: flex;

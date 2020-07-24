@@ -42,22 +42,23 @@ export default {
 
 <style lang="scss" scoped>
 .heading {
+  padding: 0;
   @extend %font;
   position: relative;
   border: none;
   outline: none;
   background-color: transparent;
   font-weight: 600;
-  padding: 0 20px;
+  padding-right: 20px;
   &_active {
     cursor: pointer;
     color: $active-bg;
     &:after {
       position: absolute;
       content: '';
-      top: 0;
+      top: 3px;
       right: 0;
-      height: 16px;
+      height: 17px;
       width: 16px;
       background-image: url('/images/sort.svg');
       background-repeat: no-repeat;

@@ -12,7 +12,11 @@
     <table class="table">
       <tr class="table__row table__row_type_heading">
         <th class="table__cell">
-          <Checkbox @check-change="selectAll" :checked="selectedAll" />
+          <Checkbox
+            class="table__box"
+            @check-change="selectAll"
+            :checked="selectedAll"
+          />
         </th>
         <TH
           v-for="column in getColumns"
@@ -26,7 +30,9 @@
       </tr>
       <div @change="selectRow" class="table__content">
         <tr class="table__row" v-for="row in setData" :key="row.id">
-          <td class="table__cell"><Checkbox :value="+row.id" /></td>
+          <td class="table__cell">
+            <Checkbox class="table__box" :value="+row.id" />
+          </td>
           <TD
             v-for="column in getColumns"
             :key="column.name"
@@ -211,14 +217,15 @@ export default {
   width: 100%;
   &__row {
     display: grid;
-    grid-template-columns: 100px 200px repeat(6, minmax(50px, 1fr));
+    grid-template-columns: 80px 200px repeat(6, minmax(50px, 1fr));
     align-items: center;
     min-height: 50px;
     &_type_heading {
       border-bottom: solid 1px #ededed;
+      min-height: 56px;
     }
 
-    &:nth-of-type(2n + 3) {
+    &:nth-of-type(2n + 2) {
       background: #f8f9fa;
     }
     &:hover {
@@ -226,7 +233,7 @@ export default {
     }
   }
   &__cell {
-    text-align: center;
+    text-align: left;
     &_type_button {
       position: relative;
       visibility: hidden;
@@ -249,6 +256,9 @@ export default {
   }
   &__button-text {
     margin-left: 8px;
+  }
+  &__box /deep/ .checkbox__label {
+    justify-content: center;
   }
 }
 </style>
