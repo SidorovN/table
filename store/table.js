@@ -59,11 +59,13 @@ export const actions = {
     })
   },
   setColumns({ commit }, { columns }) {
-    console.log(columns)
     commit('setColumns', columns)
   },
   sortTable({ commit }, { data }) {
     commit('sortTable', { data })
+  },
+  reverseTable({ commit }) {
+    commit('reverseTable')
   },
   setRange({ commit }, range) {
     commit('setRange', range)
@@ -83,8 +85,6 @@ export const mutations = {
     state.pagination.range = data
   },
   sortTable(state, data) {
-    console.log(data)
-    console.log(typeof state.table[0][data.data] === 'string')
     typeof state.table[0][data.data] === 'string'
       ? state.table.sort((a, b) => {
           if (a[data.data] > b[data.data]) {
@@ -96,17 +96,17 @@ export const mutations = {
         })
       : state.table.sort((a, b) => a[data.data] - b[data.data])
   },
+  reverseTable(state) {
+    state.table.reverse()
+  },
   setPagination(state, data) {
     state.pagination = data
   },
   setColumns(state, data) {
     state.columns.map((el) => (el.visible = !!data.includes(el.name)))
-    console.log(state.columns)
   },
   deleteItem(state, { id }) {
-    console.log(id)
     state.table = state.table.filter((el) => id.every((item) => el.id != item))
-    // console.log(state.table)
   },
 }
 

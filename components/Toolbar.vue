@@ -123,7 +123,6 @@ export default {
       const inputs = Array.from(evt.currentTarget.elements)
       const columns = inputs.filter((el) => el.checked).map((el) => el.value)
       this.selectAll = inputs.every((el) => el.checked)
-      console.log(this.selectAll)
       this.$store.dispatch('table/setColumns', { columns })
     },
     sort(evt) {
@@ -167,7 +166,6 @@ export default {
     },
     openPopup() {
       this.popupOpened = true
-      console.log(this.popupOpened)
     },
     deleteItem(id) {
       this.$store
@@ -177,7 +175,7 @@ export default {
           this.$emit('change-page')
         })
         .catch((res) => {
-          console.log(res)
+          console.error(res)
         })
         .finally((res) => {
           console.log('finally')

@@ -110,7 +110,6 @@ export default {
             .querySelector('.table__content')
             .querySelectorAll('.checkbox__button')
         )
-        console.log(inputs)
         inputs.forEach((el) => (el.checked = true))
         this.setSelected(inputs)
       }
@@ -136,21 +135,17 @@ export default {
       this.selected = []
     },
     showPopup(evt) {
-      console.log(this.popupOpened)
       const id = evt.currentTarget.value
       this.popupOpened = id
-      console.log(this.popupOpened)
     },
     deleteItem(id) {
       this.$store
         .dispatch('table/deleteItem', [id])
         .then((res) => this.resetDelete())
         .catch((res) => {
-          console.log(res)
+          console.error(res)
         })
-        .finally((res) => {
-          console.log('finally')
-        })
+        .finally((res) => {})
     },
     resetDelete() {
       this.popupOpened = ''
@@ -165,6 +160,10 @@ export default {
         this.getFirst - 1,
         this.getFirst + this.getRange - 1
       )
+    },
+    setDown() {
+      console.log(this.setData[0][this.active] > this.setData[1][this.active])
+      return this.setData[0][this.active] > this.setData[1][this.active]
     },
     getFirst() {
       const { table } = this.$store.state
