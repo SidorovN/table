@@ -79,6 +79,7 @@
           class="dropdown__item dropdown__item_type_all"
           @check-change="setAll"
           :checked="selectAll"
+          :disabled="false"
           name="columns"
           value="all"
           >All</Checkbox
@@ -122,6 +123,7 @@ export default {
       const inputs = Array.from(evt.currentTarget.elements)
       const columns = inputs.filter((el) => el.checked).map((el) => el.value)
       this.selectAll = inputs.every((el) => el.checked)
+      console.log(this.selectAll)
       this.$store.dispatch('table/setColumns', { columns })
     },
     sort(evt) {
@@ -134,9 +136,13 @@ export default {
       this.$store.dispatch('table/setRange', +range)
     },
     setAll(evt) {
-      if (evt.currentTarget.checked) {
+      evt.preventDefault()
+      this.selectAll = !this.selectAll
+      if (this.selectAll) {
         const form = document.forms.columns
         Array.from(form.elements).forEach((el) => (el.checked = true))
+        const columns = Array.from(form.elements).map((el) => el.value)
+        this.$store.dispatch('table/setColumns', { columns })
       }
     },
     nextPage() {

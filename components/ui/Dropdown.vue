@@ -53,9 +53,9 @@ export default {
     min-width: 100%;
     display: none;
     list-style: none;
-    padding: 16px;
     overflow-x: auto;
     position: absolute;
+    top: 100%;
     background: #ffffff;
     max-height: 240px;
     padding: 16px;
@@ -78,7 +78,7 @@ export default {
     margin-left: 6px;
     transition: 0.3s ease;
     &_opened {
-      transform: rotate(-180deg);
+      transform: rotate(180deg);
     }
   }
 }

@@ -5,7 +5,6 @@
     </div>
     <h1 class="error" v-if="showError && !isLoading">error</h1>
     <Table :table="table" v-if="!isLoading && table.length" />
-    <Popup />
   </div>
 </template>
 

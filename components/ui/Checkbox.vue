@@ -6,6 +6,7 @@
         class="checkbox__button visually-hidden"
         :value="value"
         :checked="checked"
+        :disabled="disabled"
         @change="$emit('check-change', $event)"
       />
       <span class="checkbox__box"></span>
@@ -20,6 +21,7 @@ export default {
     checked: Boolean,
     name: String,
     value: Number & String,
+    disabled: Boolean,
   },
 }
 </script>
