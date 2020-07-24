@@ -1,4 +1,36 @@
 $active-bg:#00A11E;
 $active-color:#fff;
+$default-color: #282136;
+$secondary-color:#3D374A;
+$dropdown-color:#3D374A;
 $font-size: 14px;
-$line-height: 14px;
+$line-height: 24px;
+
+%default-button {
+  cursor: pointer;
+  box-sizing: border-box;
+  padding:4px 8px;
+  background: inherit;
+  border: 1px solid #C6CBD4;
+  box-sizing: border-box;
+  border-radius: 2px;
+  color: #5B5E77;
+}
+
+%active {
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 1px solid $active-bg;
+  padding:4px 8px;
+  border-radius: 2px;
+  color: $active-color;  
+  background-color: $active-bg;
+}
+%font {
+  font-size: $font-size;
+  line-height: $line-height;
+}
+%popup {
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.16);
+  border-radius: 4px;
+}

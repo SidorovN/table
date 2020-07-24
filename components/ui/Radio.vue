@@ -1,5 +1,5 @@
 <template>
-  <div class="radio">
+  <div class="radio" v-if="visible">
     <label class="radio__label">
       <input
         type="radio"
@@ -20,16 +20,19 @@ export default {
     checked: Boolean,
     name: String,
     value: String,
+    visible: {
+      default: true,
+    },
   },
 }
 </script>
 
 <style lang="scss">
 .radio {
+  @extend %font;
   &__text {
-    font-size: 14px;
-    line-height: 24px;
-    padding: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
     border-radius: 2px;
   }
   &__label {
@@ -38,6 +41,11 @@ export default {
   &__button:checked ~ &__text {
     background: $active-bg;
     color: $active-color;
+  }
+  :hover {
+    background-color: $active-bg;
+    color: $active-color;
+    opacity: 0.7;
   }
 }
 </style>

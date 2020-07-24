@@ -1,79 +1,100 @@
 <template>
   <div class="toolbar">
     <div class="toolbar__group">
-      <p class="toolbar__title">Sort by:</p>
-      <Radio @radio-change="sort" name="sort" :checked="true" value="product"
-        >Product (100g serving)</Radio
+      <p class="toolbar__title">Sorting by:</p>
+      <Radio
+        v-for="column in getColumns"
+        :key="column.name"
+        @radio-change="sort"
+        class="toolbar__radio"
+        name="sort"
+        :visible="getColumns.find((el) => el.name === column.name).visible"
+        :checked="active === column.name"
+        :value="column.name"
+        >{{ column.title }}</Radio
       >
-      <Radio @radio-change="sort" name="sort" value="calories">Calories</Radio>
-      <Radio @radio-change="sort" name="sort" value="fat">Fat (g)</Radio>
-      <Radio @radio-change="sort" name="sort" value="carbs">Carbs (g)</Radio>
-      <Radio @radio-change="sort" name="sort" value="protein"
-        >Protein (g)</Radio
-      >
-      <Radio @radio-change="sort" name="sort" value="iron">Iron (g)</Radio>
     </div>
+
     <div class="toolbar__group">
-      <button v-if="!selected.length" class="toolbar__button" disabled>
-        Delete
-      </button>
-      <button v-else @click="deleteItem(selected)" class="toolbar__button">
-        {{ `Delete (${selected.length})` }}
-      </button>
-      <Dropdown class="dropdown" disabled :title="`${getRange} Per page`">
-        <li class="dropdown__item">
-          <Radio
-            @radio-change="setRange"
-            value="10"
-            :checked="true"
-            name="per-page"
-            >10</Radio
-          >
-        </li>
-        <li class="dropdown__item">
-          <Radio @radio-change="setRange" value="15" name="per-page">15</Radio>
-        </li>
-        <li class="dropdown__item">
-          <Radio @radio-change="setRange" value="25" name="per-page">25</Radio>
-        </li>
-      </Dropdown>
-      <div class="pagination">
-        <button @click="prevPage">Prev</button>
-        <p class="pagination__text">
-          {{ `${getFirst}-${getFirst + getRange - 1} of ${getTotalItems}` }}
-        </p>
-        <button @click="nextPage">Next</button>
+      <div class="toolbar__container">
+        <button v-if="!selected.length" class="toolbar__button" disabled>
+          Delete
+        </button>
+
+        <button v-else @click="openPopup" class="toolbar__button">
+          {{ `Delete (${selected.length})` }}
+        </button>
+
+        <Popup
+          v-if="popupOpened"
+          :item="selected"
+          @cancel="resetDelete"
+          @confirm="confirmDelete"
+        />
       </div>
+
+      <Dropdown class="dropdown" disabled :title="`${getRange} Per page`">
+        <Radio
+          @radio-change="setRange"
+          value="10"
+          :checked="true"
+          name="per-page"
+          >10</Radio
+        >
+        <Radio @radio-change="setRange" value="15" name="per-page">15</Radio>
+        <Radio @radio-change="setRange" value="25" name="per-page">25</Radio>
+      </Dropdown>
+
+      <div class="pagination">
+        <button
+          class="pagination__button pagination__button_prev"
+          @click="prevPage"
+          :disabled="getFirst < 2"
+        >
+          <Arrow />
+        </button>
+        <p class="pagination__text">
+          {{
+            `${getFirst}-${
+              getTotalItems > getFirst + getRange
+                ? getFirst + getRange - 1
+                : getTotalItems
+            } `
+          }}
+          <span class="pagination__span">of </span> {{ getTotalItems }}
+        </p>
+        <button
+          class="pagination__button pagination__button_next"
+          @click="nextPage"
+          :disabled="getFirst + getRange > getTotalItems"
+        >
+          <Arrow />
+        </button>
+      </div>
+
       <Dropdown
         class="dropdown"
         disabled
         :title="`${getColumns.length} columns selected`"
       >
         <Checkbox
+          class="dropdown__item dropdown__item_type_all"
           @check-change="setAll"
           :checked="selectAll"
+          :disabled="false"
           name="columns"
           value="all"
-          >All</Checkbox
+          >Select all</Checkbox
         >
         <form @change="changeColumns" class="dropdown__form" name="columns">
-          <Checkbox name="columns" value="product" :checked="true"
-            >Product</Checkbox
-          >
-          <Checkbox name="columns" value="calories" :checked="true"
-            >Calories</Checkbox
-          >
-          <Checkbox name="columns" value="fat" :checked="true"
-            >Fat (g)</Checkbox
-          >
-          <Checkbox name="columns" value="carbs" :checked="true"
-            >Carbs (g)</Checkbox
-          >
-          <Checkbox name="columns" value="protein" :checked="true"
-            >Protein (g)</Checkbox
-          >
-          <Checkbox name="columns" value="iron" :checked="true"
-            >Iron (g)</Checkbox
+          <Checkbox
+            v-for="column in getColumns"
+            class="dropdown__item"
+            :key="column.name"
+            :value="column.name"
+            name="columns"
+            :checked="true"
+            >{{ column.title }}</Checkbox
           >
         </form>
       </Dropdown>
@@ -82,15 +103,21 @@
 </template>
 
 <script>
+import Arrow from '@/components/ui/Arrow'
 import Dropdown from '@/components/ui/Dropdown'
+import Popup from '@/components/Popup'
 export default {
   components: {
+    Arrow,
     Dropdown,
+    Popup,
   },
   props: ['totalItems', 'firstItem', 'lastItem', 'selected'],
   data() {
     return {
       selectAll: true,
+      active: 'product',
+      popupOpened: false,
     }
   },
   methods: {
@@ -103,15 +130,20 @@ export default {
     sort(evt) {
       const param = evt.target.value
       this.$store.dispatch('table/sortTable', { data: param })
+      this.$emit('sort', param)
     },
     setRange(evt) {
       const range = evt.target.value
       this.$store.dispatch('table/setRange', +range)
     },
     setAll(evt) {
-      if (evt.currentTarget.checked) {
+      evt.preventDefault()
+      this.selectAll = !this.selectAll
+      if (this.selectAll) {
         const form = document.forms.columns
         Array.from(form.elements).forEach((el) => (el.checked = true))
+        const columns = Array.from(form.elements).map((el) => el.value)
+        this.$store.dispatch('table/setColumns', { columns })
       }
     },
     nextPage() {
@@ -134,19 +166,33 @@ export default {
         range: range,
       })
     },
+    openPopup() {
+      this.popupOpened = true
+    },
     deleteItem(id) {
-      console.log(id)
+      this.$store.dispatch('table/setLoading', true)
       this.$store
         .dispatch('table/deleteItem', id)
         .then((res) => {
+          this.$store.dispatch('table/setError', false)
+          this.resetDelete()
           this.$emit('change-page')
         })
         .catch((res) => {
-          console.log(res)
+          this.$store.dispatch('table/setError', true)
+          console.error(res)
         })
         .finally((res) => {
-          console.log('finally')
+          this.$store.dispatch('table/setLoading', false)
         })
+      console.log(this.$store.getters['table/getLoading'])
+    },
+    resetDelete() {
+      this.$store.dispatch('table/setError', false)
+      this.popupOpened = false
+    },
+    confirmDelete() {
+      this.deleteItem(this.selected)
     },
   },
   computed: {
@@ -173,19 +219,18 @@ export default {
 
 <style lang="scss" scoped>
 .toolbar {
-  font-size: $font-size;
-  line-height: $line-height;
+  padding: 16px 0;
+  @extend %font;
   display: flex;
   justify-content: space-between;
+  align-items: stretch;
+  border-top: solid 1px #ededed;
   &__group {
     align-items: center;
     display: flex;
   }
   &__button {
-    background-color: $active-bg;
-    color: $active-color;
-    border: 1px solid transparent;
-    border-radius: 2px;
+    @extend %active;
     height: 100%;
     margin-right: 12px;
     &:disabled {
@@ -194,8 +239,58 @@ export default {
       border: 1px solid #c6cbd4;
     }
   }
+  &__title {
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  &__container {
+    height: 100%;
+    position: relative;
+  }
+}
+.dropdown {
+  height: 100%;
+  @extend %font;
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+  &__item {
+    &_type_all {
+      font-weight: 600;
+    }
+    color: $default-color;
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
+  }
 }
 .pagination {
   display: flex;
+  align-items: center;
+  margin: 0 16px;
+  &__text {
+    font-weight: 600;
+    margin: 0 8px;
+  }
+  &__span {
+    font-weight: 400;
+  }
+  &__button {
+    border: 1px solid #d5dae0;
+    padding: 0;
+    height: 32px;
+    width: 32px;
+    background-color: transparent;
+    &:disabled {
+      opacity: 0.5;
+    }
+    &_next {
+      transform: rotate(-90deg);
+    }
+    &_prev {
+      transform: rotate(90deg);
+    }
+  }
 }
 </style>

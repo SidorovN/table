@@ -4,7 +4,40 @@ import { deleteProducts } from '@/assets/request'
 export const state = () => ({
   table: [],
   pagination: {},
-  columns: ['product', 'calories', 'fat', 'carbs', 'protein'],
+  columns: [
+    {
+      name: 'product',
+      title: 'Product (100g serving)',
+      visible: true,
+    },
+    {
+      name: 'calories',
+      title: 'Calories',
+      visible: true,
+    },
+    {
+      name: 'fat',
+      title: 'Fat (g)',
+      visible: true,
+    },
+    {
+      name: 'carbs',
+      title: 'Carbs (g)',
+      visible: true,
+    },
+    {
+      name: 'protein',
+      title: 'Protein (g)',
+      visible: true,
+    },
+    {
+      name: 'iron',
+      title: 'Iron (%)',
+      visible: true,
+    },
+  ],
+  loading: true,
+  error: false,
 })
 
 export const actions = {
@@ -28,18 +61,25 @@ export const actions = {
     })
   },
   setColumns({ commit }, { columns }) {
-    console.log(columns)
     commit('setColumns', columns)
+  },
+  setLoading({ commit }, load) {
+    commit('setLoading', load)
+  },
+  setError({ commit }, error) {
+    commit('setError', error)
   },
   sortTable({ commit }, { data }) {
     commit('sortTable', { data })
+  },
+  reverseTable({ commit }) {
+    commit('reverseTable')
   },
   setRange({ commit }, range) {
     commit('setRange', range)
   },
   deleteItem({ commit }, id) {
     return deleteProducts().then((res) => {
-      console.log(id)
       commit('deleteItem', { id })
     })
   },
@@ -49,12 +89,18 @@ export const mutations = {
   setState(state, data) {
     state.table = data.table
   },
+  setError(state, error) {
+    console.log(error)
+    state.error = error
+    console.log(state.error)
+  },
+  setLoading(state, data) {
+    state.loading = data
+  },
   setRange(state, data) {
     state.pagination.range = data
   },
   sortTable(state, data) {
-    console.log(data)
-    console.log(typeof state.table[0][data.data] === 'string')
     typeof state.table[0][data.data] === 'string'
       ? state.table.sort((a, b) => {
           if (a[data.data] > b[data.data]) {
@@ -66,16 +112,17 @@ export const mutations = {
         })
       : state.table.sort((a, b) => a[data.data] - b[data.data])
   },
+  reverseTable(state) {
+    state.table.reverse()
+  },
   setPagination(state, data) {
     state.pagination = data
   },
   setColumns(state, data) {
-    state.columns = data
+    state.columns.map((el) => (el.visible = !!data.includes(el.name)))
   },
   deleteItem(state, { id }) {
-    console.log(id)
     state.table = state.table.filter((el) => id.every((item) => el.id != item))
-    // console.log(state.table)
   },
 }
 
@@ -85,5 +132,11 @@ export const getters = {
   },
   getPagination(state) {
     return state.pagination
+  },
+  getLoading(state) {
+    return state.loading
+  },
+  getError(state) {
+    return state.error
   },
 }

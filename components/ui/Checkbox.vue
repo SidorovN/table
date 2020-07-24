@@ -6,6 +6,7 @@
         class="checkbox__button visually-hidden"
         :value="value"
         :checked="checked"
+        :disabled="disabled"
         @change="$emit('check-change', $event)"
       />
       <span class="checkbox__box"></span>
@@ -19,15 +20,17 @@ export default {
   props: {
     checked: Boolean,
     name: String,
-    value: String,
+    value: Number & String,
+    disabled: Boolean,
   },
 }
 </script>
 
 <style lang="scss" scoped>
 .checkbox {
-  display: inline-block;
+  @extend %font;
   &__label {
+    cursor: pointer;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -43,9 +46,8 @@ export default {
     background-repeat: no-repeat;
   }
   &__button:checked ~ &__box {
-    background-color: $active-bg;
-    border: 1px solid transparent;
-    color: $active-color;
+    @extend %active;
+    padding: 0;
     background-image: url('/images/shape.svg');
   }
 }
