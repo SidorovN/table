@@ -59,6 +59,7 @@ export default {
     background: #ffffff;
     max-height: 240px;
     padding: 16px;
+    z-index: 2;
     &_opened {
       display: block;
     }

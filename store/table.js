@@ -32,10 +32,12 @@ export const state = () => ({
     },
     {
       name: 'iron',
-      title: 'Iron (g)',
+      title: 'Iron (%)',
       visible: true,
     },
   ],
+  loading: true,
+  error: false,
 })
 
 export const actions = {
@@ -61,6 +63,12 @@ export const actions = {
   setColumns({ commit }, { columns }) {
     commit('setColumns', columns)
   },
+  setLoading({ commit }, load) {
+    commit('setLoading', load)
+  },
+  setError({ commit }, error) {
+    commit('setError', error)
+  },
   sortTable({ commit }, { data }) {
     commit('sortTable', { data })
   },
@@ -80,6 +88,14 @@ export const actions = {
 export const mutations = {
   setState(state, data) {
     state.table = data.table
+  },
+  setError(state, error) {
+    console.log(error)
+    state.error = error
+    console.log(state.error)
+  },
+  setLoading(state, data) {
+    state.loading = data
   },
   setRange(state, data) {
     state.pagination.range = data
@@ -116,5 +132,11 @@ export const getters = {
   },
   getPagination(state) {
     return state.pagination
+  },
+  getLoading(state) {
+    return state.loading
+  },
+  getError(state) {
+    return state.error
   },
 }

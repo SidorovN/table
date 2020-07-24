@@ -8,6 +8,7 @@
         @radio-change="sort"
         class="toolbar__radio"
         name="sort"
+        :visible="getColumns.find((el) => el.name === column.name).visible"
         :checked="active === column.name"
         :value="column.name"
         >{{ column.title }}</Radio
@@ -58,8 +59,9 @@
               getTotalItems > getFirst + getRange
                 ? getFirst + getRange - 1
                 : getTotalItems
-            } of ${getTotalItems}`
+            } `
           }}
+          <span class="pagination__span">of </span> {{ getTotalItems }}
         </p>
         <button
           class="pagination__button pagination__button_next"
@@ -82,7 +84,7 @@
           :disabled="false"
           name="columns"
           value="all"
-          >All</Checkbox
+          >Select all</Checkbox
         >
         <form @change="changeColumns" class="dropdown__form" name="columns">
           <Checkbox
@@ -168,20 +170,25 @@ export default {
       this.popupOpened = true
     },
     deleteItem(id) {
+      this.$store.dispatch('table/setLoading', true)
       this.$store
         .dispatch('table/deleteItem', id)
         .then((res) => {
+          this.$store.dispatch('table/setError', false)
           this.resetDelete()
           this.$emit('change-page')
         })
         .catch((res) => {
+          this.$store.dispatch('table/setError', true)
           console.error(res)
         })
         .finally((res) => {
-          console.log('finally')
+          this.$store.dispatch('table/setLoading', false)
         })
+      console.log(this.$store.getters['table/getLoading'])
     },
     resetDelete() {
+      this.$store.dispatch('table/setError', false)
       this.popupOpened = false
     },
     confirmDelete() {
@@ -217,6 +224,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+  border-top: solid 1px #ededed;
   &__group {
     align-items: center;
     display: flex;
@@ -249,7 +257,7 @@ export default {
   }
   &__item {
     &_type_all {
-      font-weight: 600px;
+      font-weight: 600;
     }
     color: $default-color;
     &:not(:last-child) {
@@ -261,9 +269,12 @@ export default {
   display: flex;
   align-items: center;
   margin: 0 16px;
-
   &__text {
+    font-weight: 600;
     margin: 0 8px;
+  }
+  &__span {
+    font-weight: 400;
   }
   &__button {
     border: 1px solid #d5dae0;

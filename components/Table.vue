@@ -1,5 +1,6 @@
 <template>
-  <div class="">
+  <section class="section">
+    <h1 class="section__title">Table UI</h1>
     <Toolbar
       :totalItems="table.length"
       :firstItem="1"
@@ -72,7 +73,7 @@
         </tr>
       </div>
     </table>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -128,6 +129,7 @@ export default {
       this.selected = rows
     },
     setActive(param) {
+      this.selectedAll = false
       this.active = param
     },
     resetChecks() {
@@ -139,15 +141,21 @@ export default {
       this.popupOpened = id
     },
     deleteItem(id) {
+      this.$store.dispatch('table/setLoading', true)
       this.$store
         .dispatch('table/deleteItem', [id])
+        .then((res) => this.$store.dispatch('table/setError', false))
         .then((res) => this.resetDelete())
         .catch((res) => {
+          this.$store.dispatch('table/setError', true)
           console.error(res)
         })
-        .finally((res) => {})
+        .finally((res) => {
+          this.$store.dispatch('table/setLoading', false)
+        })
     },
     resetDelete() {
+      this.$store.dispatch('table/setError', false)
       this.popupOpened = ''
     },
     confirmDelete() {
@@ -162,7 +170,6 @@ export default {
       )
     },
     setDown() {
-      console.log(this.setData[0][this.active] > this.setData[1][this.active])
       return this.setData[0][this.active] > this.setData[1][this.active]
     },
     getFirst() {
@@ -186,6 +193,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.section {
+  margin: 0 auto;
+  max-width: 1140px;
+  &__title {
+    color: $default-color;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 40px;
+  }
+}
 .table {
   @extend %font;
   color: $default-color;
@@ -195,6 +214,9 @@ export default {
     grid-template-columns: 100px 200px repeat(6, minmax(50px, 1fr));
     align-items: center;
     min-height: 50px;
+    &_type_heading {
+      border-bottom: solid 1px #ededed;
+    }
 
     &:nth-of-type(2n + 3) {
       background: #f8f9fa;
@@ -212,6 +234,9 @@ export default {
   }
   &__row:hover &__cell_type_button {
     visibility: visible;
+  }
+  &__row:hover &__cell:nth-child(2) {
+    font-weight: 600;
   }
   &__button {
     cursor: pointer;

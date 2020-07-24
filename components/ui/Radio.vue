@@ -1,5 +1,5 @@
 <template>
-  <div class="radio">
+  <div class="radio" v-if="visible">
     <label class="radio__label">
       <input
         type="radio"
@@ -20,6 +20,9 @@ export default {
     checked: Boolean,
     name: String,
     value: String,
+    visible: {
+      default: true,
+    },
   },
 }
 </script>

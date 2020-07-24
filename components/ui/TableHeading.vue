@@ -42,6 +42,7 @@ export default {
 
 <style lang="scss" scoped>
 .heading {
+  @extend %font;
   position: relative;
   border: none;
   outline: none;
