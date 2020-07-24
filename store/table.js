@@ -4,7 +4,38 @@ import { deleteProducts } from '@/assets/request'
 export const state = () => ({
   table: [],
   pagination: {},
-  columns: ['product', 'calories', 'fat', 'carbs', 'protein'],
+  columns: [
+    {
+      name: 'product',
+      title: 'Product (100g serving)',
+      visible: true,
+    },
+    {
+      name: 'calories',
+      title: 'Calories',
+      visible: true,
+    },
+    {
+      name: 'fat',
+      title: 'Fat (g)',
+      visible: true,
+    },
+    {
+      name: 'carbs',
+      title: 'Carbs (g)',
+      visible: true,
+    },
+    {
+      name: 'protein',
+      title: 'Protein (g)',
+      visible: true,
+    },
+    {
+      name: 'iron',
+      title: 'Iron (g)',
+      visible: true,
+    },
+  ],
 })
 
 export const actions = {
@@ -70,7 +101,8 @@ export const mutations = {
     state.pagination = data
   },
   setColumns(state, data) {
-    state.columns = data
+    state.columns.map((el) => (el.visible = !!data.includes(el.name)))
+    console.log(state.columns)
   },
   deleteItem(state, { id }) {
     console.log(id)

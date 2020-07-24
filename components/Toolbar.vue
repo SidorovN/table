@@ -3,38 +3,15 @@
     <div class="toolbar__group">
       <p class="toolbar__title">Sorting by:</p>
       <Radio
+        v-for="column in getColumns"
+        :key="column.name"
         @radio-change="sort"
         class="toolbar__radio"
         name="sort"
-        :checked="true"
-        value="product"
-        >Product (100g serving)</Radio
+        :checked="active === column.name"
+        :value="column.name"
+        >{{ column.title }}</Radio
       >
-      <Radio
-        @radio-change="sort"
-        class="toolbar__radio"
-        name="sort"
-        value="calories"
-        >Calories</Radio
-      >
-      <Radio @radio-change="sort" class="toolbar__radio" name="sort" value="fat"
-        >Fat (g)</Radio
-      >
-      <Radio
-        @radio-change="sort"
-        class="toolbar__radio"
-        name="sort"
-        value="carbs"
-        >Carbs (g)</Radio
-      >
-      <Radio
-        @radio-change="sort"
-        class="toolbar__radio"
-        name="sort"
-        value="protein"
-        >Protein (g)</Radio
-      >
-      <Radio @radio-change="sort" name="sort" value="iron">Iron (g)</Radio>
     </div>
     <div class="toolbar__group">
       <button v-if="!selected.length" class="toolbar__button" disabled>
@@ -74,23 +51,13 @@
           >All</Checkbox
         >
         <form @change="changeColumns" class="dropdown__form" name="columns">
-          <Checkbox name="columns" value="product" :checked="true"
-            >Product</Checkbox
-          >
-          <Checkbox name="columns" value="calories" :checked="true"
-            >Calories</Checkbox
-          >
-          <Checkbox name="columns" value="fat" :checked="true"
-            >Fat (g)</Checkbox
-          >
-          <Checkbox name="columns" value="carbs" :checked="true"
-            >Carbs (g)</Checkbox
-          >
-          <Checkbox name="columns" value="protein" :checked="true"
-            >Protein (g)</Checkbox
-          >
-          <Checkbox name="columns" value="iron" :checked="true"
-            >Iron (g)</Checkbox
+          <Checkbox
+            v-for="column in getColumns"
+            :key="column.name"
+            name="columns"
+            checked="true"
+            :value="column.name"
+            >{{ column.title.slice(0, 15) }}</Checkbox
           >
         </form>
       </Dropdown>
@@ -108,6 +75,7 @@ export default {
   data() {
     return {
       selectAll: true,
+      active: 'product',
     }
   },
   methods: {

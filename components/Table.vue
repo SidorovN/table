@@ -10,88 +10,30 @@
     />
     <table class="table">
       <tr class="table__row table__row_type_heading">
-        <th class="table__cell table__cell_type_heading">
+        <th class="table__cell">
           <Checkbox @check-change="selectAll" :checked="selectedAll" />
         </th>
         <TH
+          v-for="column in getColumns"
+          :key="column.name"
           class="table__cell table__cell_type_heading"
-          v-if="getColumns.includes('product')"
-          title="Product (100g serving)"
-          name="product"
+          :visible="getColumns.find((el) => el.name === column.name).visible"
+          :title="column.title"
+          :name="column.name"
           :selected="active"
         />
-        <th
-          :class="[
-            'table__cell',
-            'table__cell_type_heading',
-            { table__cell_active: active === 'calories' },
-          ]"
-          v-if="getColumns.includes('calories')"
-        >
-          Calories
-        </th>
-        <th
-          :class="[
-            'table__cell',
-            'table__cell_type_heading',
-            { table__cell_active: active === 'fat' },
-          ]"
-          v-if="getColumns.includes('fat')"
-        >
-          Fat (g)
-        </th>
-        <th
-          :class="[
-            'table__cell',
-            'table__cell_type_heading',
-            { table__cell_active: active === 'carbs' },
-          ]"
-          v-if="getColumns.includes('carbs')"
-        >
-          Carbs (g)
-        </th>
-        <th
-          :class="[
-            'table__cell',
-            'table__cell_type_heading',
-            { table__cell_active: active === 'protein' },
-          ]"
-          v-if="getColumns.includes('protein')"
-        >
-          Protein (g)
-        </th>
-        <th
-          :class="[
-            'table__cell',
-            'table__cell_type_heading',
-            { table__cell_active: active === 'iron' },
-          ]"
-          v-if="getColumns.includes('iron')"
-        >
-          Iron (g)
-        </th>
       </tr>
       <div @change="selectRow" class="table__content">
         <tr class="table__row" v-for="row in setData" :key="row.id">
-          <th class="table__cell"><Checkbox :value="row.id.toString()" /></th>
-          <td class="table__cell" v-if="getColumns.includes('product')">
-            {{ row.product }}
-          </td>
-          <td class="table__cell" v-if="getColumns.includes('calories')">
-            {{ row.calories }}
-          </td>
-          <td class="table__cell" v-if="getColumns.includes('fat')">
-            {{ row.fat }} (g)
-          </td>
-          <td class="table__cell" v-if="getColumns.includes('carbs')">
-            {{ row.carbs }} (g)
-          </td>
-          <td class="table__cell" v-if="getColumns.includes('protein')">
-            {{ row.protein }} (g)
-          </td>
-          <td class="table__cell" v-if="getColumns.includes('iron')">
-            {{ row.iron }} (g)
-          </td>
+          <td class="table__cell"><Checkbox :value="row.id.toString()" /></td>
+          <TD
+            v-for="column in getColumns"
+            :key="column.name"
+            class="table__cell"
+            :visible="getColumns.find((el) => el.name === column.name).visible"
+            :title="row[column.name]"
+            :name="column.name"
+          />
           <td class="table__cell table__cell_type_button">
             <button @click="deleteItem">Delete</button>
           </td>
@@ -104,6 +46,7 @@
 <script>
 import Radio from '@/components/ui/Radio'
 import TableHeading from '@/components/ui/TableHeading'
+import TableCell from '@/components/ui/TableCell'
 import Checkbox from '@/components/ui/Checkbox'
 import Toolbar from '@/components/Toolbar'
 export default {
@@ -112,6 +55,7 @@ export default {
     Checkbox,
     Toolbar,
     TH: TableHeading,
+    TD: TableCell,
   },
   data() {
     return {
@@ -220,12 +164,6 @@ export default {
     text-align: center;
     &_type_button {
       visibility: hidden;
-    }
-    &_active {
-      color: $active-bg;
-    }
-    &_type_heading {
-      font-weight: 600px;
     }
   }
   &__row:hover &__cell_type_button {

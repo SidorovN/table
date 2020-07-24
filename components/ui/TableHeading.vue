@@ -1,11 +1,5 @@
 <template>
-  <th
-    :class="[
-      'table__cell',
-      'table__cell_type_heading',
-      { table__cell_active: active },
-    ]"
-  >
+  <th v-if="visible" :class="['heading', { heading_active: active }]">
     {{ title }}
     <button v-if="active">arrow</button>
   </th>
@@ -13,16 +7,20 @@
 
 <script>
 export default {
-  props: ['selected', 'name', 'title'],
+  props: ['selected', 'name', 'title', 'visible'],
   computed: {
     active() {
       return this.selected === this.name
     },
   },
-  mounted() {
-    console.log(this.selected, this.name)
-  },
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.heading {
+  font-weight: 600px;
+  &_active {
+    color: $active-bg;
+  }
+}
+</style>
