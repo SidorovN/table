@@ -20,6 +20,7 @@ export default {
 .heading {
   font-weight: 600px;
   &_active {
+    cursor: pointer;
     color: $active-bg;
   }
 }

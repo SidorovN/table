@@ -25,7 +25,7 @@
       </tr>
       <div @change="selectRow" class="table__content">
         <tr class="table__row" v-for="row in setData" :key="row.id">
-          <td class="table__cell"><Checkbox :value="row.id.toString()" /></td>
+          <td class="table__cell"><Checkbox :value="+row.id" /></td>
           <TD
             v-for="column in getColumns"
             :key="column.name"
@@ -35,7 +35,13 @@
             :name="column.name"
           />
           <td class="table__cell table__cell_type_button">
-            <button @click="deleteItem">Delete</button>
+            <button @click="showPopup" :value="+row.id">Delete</button>
+            <Popup
+              v-if="popupOpened === row.id.toString()"
+              :item="row.id.toString()"
+              @cancel="resetDelete"
+              @confirm="confirmDelete"
+            />
           </td>
         </tr>
       </div>
@@ -44,6 +50,7 @@
 </template>
 
 <script>
+import Popup from '@/components/Popup.vue'
 import Radio from '@/components/ui/Radio'
 import TableHeading from '@/components/ui/TableHeading'
 import TableCell from '@/components/ui/TableCell'
@@ -51,6 +58,7 @@ import Checkbox from '@/components/ui/Checkbox'
 import Toolbar from '@/components/Toolbar'
 export default {
   components: {
+    Popup,
     Radio,
     Checkbox,
     Toolbar,
@@ -63,6 +71,7 @@ export default {
       selected: [],
       selectedAll: false,
       active: 'product',
+      popupOpened: '',
     }
   },
   props: ['table'],
@@ -100,19 +109,26 @@ export default {
       this.selectedAll = false
       this.selected = []
     },
-    deleteItem(evt) {
-      const id = evt.target
-        .closest('.table__row')
-        .querySelector('.checkbox__button').value
-      console.log([id])
+    showPopup(evt) {
+      const id = evt.target.value
+      this.popupOpened = id
+    },
+    deleteItem(id) {
       this.$store
         .dispatch('table/deleteItem', [id])
+        .then((res) => this.resetDelete())
         .catch((res) => {
           console.log(res)
         })
         .finally((res) => {
           console.log('finally')
         })
+    },
+    resetDelete() {
+      this.popupOpened = ''
+    },
+    confirmDelete() {
+      this.deleteItem(this.popupOpened)
     },
   },
   computed: {
@@ -163,6 +179,7 @@ export default {
   &__cell {
     text-align: center;
     &_type_button {
+      position: relative;
       visibility: hidden;
     }
   }

@@ -70,7 +70,6 @@ export const actions = {
   },
   deleteItem({ commit }, id) {
     return deleteProducts().then((res) => {
-      console.log(id)
       commit('deleteItem', { id })
     })
   },

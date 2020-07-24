@@ -13,13 +13,25 @@
         >{{ column.title }}</Radio
       >
     </div>
+
     <div class="toolbar__group">
-      <button v-if="!selected.length" class="toolbar__button" disabled>
-        Delete
-      </button>
-      <button v-else @click="deleteItem(selected)" class="toolbar__button">
-        {{ `Delete (${selected.length})` }}
-      </button>
+      <div class="toolbar__container">
+        <button v-if="!selected.length" class="toolbar__button" disabled>
+          Delete
+        </button>
+
+        <button v-else @click="openPopup" class="toolbar__button">
+          {{ `Delete (${selected.length})` }}
+        </button>
+
+        <Popup
+          v-if="popupOpened"
+          :item="selected"
+          @cancel="resetDelete"
+          @confirm="confirmDelete"
+        />
+      </div>
+
       <Dropdown class="dropdown" disabled :title="`${getRange} Per page`">
         <Radio
           @radio-change="setRange"
@@ -31,19 +43,40 @@
         <Radio @radio-change="setRange" value="15" name="per-page">15</Radio>
         <Radio @radio-change="setRange" value="25" name="per-page">25</Radio>
       </Dropdown>
+
       <div class="pagination">
-        <button class="pagination__button" @click="prevPage">Prev</button>
+        <button
+          class="pagination__button pagination__button_prev"
+          @click="prevPage"
+          :disabled="getFirst < 2"
+        >
+          <Arrow />
+        </button>
         <p class="pagination__text">
-          {{ `${getFirst}-${getFirst + getRange - 1} of ${getTotalItems}` }}
+          {{
+            `${getFirst}-${
+              getTotalItems > getFirst + getRange
+                ? getFirst + getRange - 1
+                : getTotalItems
+            } of ${getTotalItems}`
+          }}
         </p>
-        <button class="pagination__button" @click="nextPage">Next</button>
+        <button
+          class="pagination__button pagination__button_next"
+          @click="nextPage"
+          :disabled="getFirst + getRange > getTotalItems"
+        >
+          <Arrow />
+        </button>
       </div>
+
       <Dropdown
         class="dropdown"
         disabled
         :title="`${getColumns.length} columns selected`"
       >
         <Checkbox
+          class="dropdown__item dropdown__item_type_all"
           @check-change="setAll"
           :checked="selectAll"
           name="columns"
@@ -53,11 +86,12 @@
         <form @change="changeColumns" class="dropdown__form" name="columns">
           <Checkbox
             v-for="column in getColumns"
+            class="dropdown__item"
             :key="column.name"
-            name="columns"
-            checked="true"
             :value="column.name"
-            >{{ column.title.slice(0, 15) }}</Checkbox
+            name="columns"
+            :checked="true"
+            >{{ column.title }}</Checkbox
           >
         </form>
       </Dropdown>
@@ -66,16 +100,21 @@
 </template>
 
 <script>
+import Arrow from '@/components/ui/Arrow'
 import Dropdown from '@/components/ui/Dropdown'
+import Popup from '@/components/Popup'
 export default {
   components: {
+    Arrow,
     Dropdown,
+    Popup,
   },
   props: ['totalItems', 'firstItem', 'lastItem', 'selected'],
   data() {
     return {
       selectAll: true,
       active: 'product',
+      popupOpened: false,
     }
   },
   methods: {
@@ -120,11 +159,15 @@ export default {
         range: range,
       })
     },
+    openPopup() {
+      this.popupOpened = true
+      console.log(this.popupOpened)
+    },
     deleteItem(id) {
-      console.log(id)
       this.$store
         .dispatch('table/deleteItem', id)
         .then((res) => {
+          this.resetDelete()
           this.$emit('change-page')
         })
         .catch((res) => {
@@ -133,6 +176,12 @@ export default {
         .finally((res) => {
           console.log('finally')
         })
+    },
+    resetDelete() {
+      this.popupOpened = false
+    },
+    confirmDelete() {
+      this.deleteItem(this.selected)
     },
   },
   computed: {
@@ -163,15 +212,13 @@ export default {
   @extend %font;
   display: flex;
   justify-content: space-between;
+  align-items: stretch;
   &__group {
     align-items: center;
     display: flex;
   }
   &__button {
-    background-color: $active-bg;
-    color: $active-color;
-    border: 1px solid transparent;
-    border-radius: 2px;
+    @extend %active;
     height: 100%;
     margin-right: 12px;
     &:disabled {
@@ -184,6 +231,27 @@ export default {
     font-weight: bold;
     margin-right: 8px;
   }
+  &__container {
+    height: 100%;
+    position: relative;
+  }
+}
+.dropdown {
+  height: 100%;
+  @extend %font;
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+  &__item {
+    &_type_all {
+      font-weight: 600px;
+    }
+    color: $default-color;
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
+  }
 }
 .pagination {
   display: flex;
@@ -192,6 +260,22 @@ export default {
 
   &__text {
     margin: 0 8px;
+  }
+  &__button {
+    border: 1px solid #d5dae0;
+    padding: 0;
+    height: 32px;
+    width: 32px;
+    background-color: transparent;
+    &:disabled {
+      opacity: 0.5;
+    }
+    &_next {
+      transform: rotate(-90deg);
+    }
+    &_prev {
+      transform: rotate(90deg);
+    }
   }
 }
 </style>

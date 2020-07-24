@@ -28,7 +28,8 @@ export default {
 .radio {
   @extend %font;
   &__text {
-    padding: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
     border-radius: 2px;
   }
   &__label {
@@ -37,6 +38,11 @@ export default {
   &__button:checked ~ &__text {
     background: $active-bg;
     color: $active-color;
+  }
+  :hover {
+    background-color: $active-bg;
+    color: $active-color;
+    opacity: 0.7;
   }
 }
 </style>

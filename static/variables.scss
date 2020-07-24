@@ -1,14 +1,22 @@
 $active-bg:#00A11E;
 $active-color:#fff;
-$font-size: 14px;
-$line-height: 14px;
 $default-color: #282136;
+$secondary-color:#3D374A;;
+$font-size: 14px;
+$line-height: 24px;
 
 %active {
+  border: none;
+  padding:4px 8px;
+  border-radius: 2px;
   color: $active-color;  
   background-color: $active-bg;
 }
 %font {
   font-size: $font-size;
   line-height: $line-height;
+}
+%popup {
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.16);
+  border-radius: 4px;
 }

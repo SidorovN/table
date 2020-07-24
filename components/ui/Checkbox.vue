@@ -19,7 +19,7 @@ export default {
   props: {
     checked: Boolean,
     name: String,
-    value: String,
+    value: Number & String,
   },
 }
 </script>
@@ -29,6 +29,7 @@ export default {
   @extend %font;
   display: inline-block;
   &__label {
+    cursor: pointer;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -45,7 +46,7 @@ export default {
   }
   &__button:checked ~ &__box {
     @extend %active;
-    border: 1px solid transparent;
+    padding: 0;
     background-image: url('/images/shape.svg');
   }
 }
