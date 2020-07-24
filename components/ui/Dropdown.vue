@@ -4,7 +4,10 @@
       <p>
         {{ title }}
       </p>
-      <Arrow class="dropdown__arrow" />
+      <Arrow
+        color="#5B5E77"
+        :class="['dropdown__arrow', { dropdown__arrow_opened: listOpened }]"
+      />
     </button>
     <div :class="['dropdown__list', { dropdown__list_opened: listOpened }]">
       <slot></slot>
@@ -40,6 +43,7 @@ export default {
 <style lang="scss" scoped>
 .dropdown {
   @extend %font;
+  color: $dropdown-color;
   position: relative;
   &__list {
     @extend %popup;
@@ -60,6 +64,7 @@ export default {
     }
   }
   &__button {
+    color: $dropdown-color;
     height: 100%;
     display: flex;
     align-items: center;
@@ -68,6 +73,13 @@ export default {
     border: 1px solid #d5dae0;
     border-radius: 2px;
     vertical-align: baseline;
+  }
+  &__arrow {
+    margin-left: 6px;
+    transition: 0.3s ease;
+    &_opened {
+      transform: rotate(-180deg);
+    }
   }
 }
 </style>

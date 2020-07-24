@@ -43,7 +43,7 @@ export default {
 
 <style lang="scss" scoped>
 body {
-  font-family: Source Sans Pro;
+  font-family: 'Source Sans Pro';
 }
 .preloader {
   width: 400px;

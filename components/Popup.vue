@@ -46,7 +46,11 @@ export default {
     margin: 0 auto;
   }
   &__button {
-    @extend %active;
+    @extend %default-button;
+    @extend %font;
+    &_type_active {
+      @extend %active;
+    }
   }
 }
 </style>
