@@ -26,6 +26,7 @@ export default {
 
 <style lang="scss" scoped>
 .checkbox {
+  @extend %font;
   display: inline-block;
   &__label {
     display: flex;
@@ -43,9 +44,8 @@ export default {
     background-repeat: no-repeat;
   }
   &__button:checked ~ &__box {
-    background-color: $active-bg;
+    @extend %active;
     border: 1px solid transparent;
-    color: $active-color;
     background-image: url('/images/shape.svg');
   }
 }

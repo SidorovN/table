@@ -1,14 +1,37 @@
 <template>
   <div class="toolbar">
     <div class="toolbar__group">
-      <p class="toolbar__title">Sort by:</p>
-      <Radio @radio-change="sort" name="sort" :checked="true" value="product"
+      <p class="toolbar__title">Sorting by:</p>
+      <Radio
+        @radio-change="sort"
+        class="toolbar__radio"
+        name="sort"
+        :checked="true"
+        value="product"
         >Product (100g serving)</Radio
       >
-      <Radio @radio-change="sort" name="sort" value="calories">Calories</Radio>
-      <Radio @radio-change="sort" name="sort" value="fat">Fat (g)</Radio>
-      <Radio @radio-change="sort" name="sort" value="carbs">Carbs (g)</Radio>
-      <Radio @radio-change="sort" name="sort" value="protein"
+      <Radio
+        @radio-change="sort"
+        class="toolbar__radio"
+        name="sort"
+        value="calories"
+        >Calories</Radio
+      >
+      <Radio @radio-change="sort" class="toolbar__radio" name="sort" value="fat"
+        >Fat (g)</Radio
+      >
+      <Radio
+        @radio-change="sort"
+        class="toolbar__radio"
+        name="sort"
+        value="carbs"
+        >Carbs (g)</Radio
+      >
+      <Radio
+        @radio-change="sort"
+        class="toolbar__radio"
+        name="sort"
+        value="protein"
         >Protein (g)</Radio
       >
       <Radio @radio-change="sort" name="sort" value="iron">Iron (g)</Radio>
@@ -21,28 +44,22 @@
         {{ `Delete (${selected.length})` }}
       </button>
       <Dropdown class="dropdown" disabled :title="`${getRange} Per page`">
-        <li class="dropdown__item">
-          <Radio
-            @radio-change="setRange"
-            value="10"
-            :checked="true"
-            name="per-page"
-            >10</Radio
-          >
-        </li>
-        <li class="dropdown__item">
-          <Radio @radio-change="setRange" value="15" name="per-page">15</Radio>
-        </li>
-        <li class="dropdown__item">
-          <Radio @radio-change="setRange" value="25" name="per-page">25</Radio>
-        </li>
+        <Radio
+          @radio-change="setRange"
+          value="10"
+          :checked="true"
+          name="per-page"
+          >10</Radio
+        >
+        <Radio @radio-change="setRange" value="15" name="per-page">15</Radio>
+        <Radio @radio-change="setRange" value="25" name="per-page">25</Radio>
       </Dropdown>
       <div class="pagination">
-        <button @click="prevPage">Prev</button>
+        <button class="pagination__button" @click="prevPage">Prev</button>
         <p class="pagination__text">
           {{ `${getFirst}-${getFirst + getRange - 1} of ${getTotalItems}` }}
         </p>
-        <button @click="nextPage">Next</button>
+        <button class="pagination__button" @click="nextPage">Next</button>
       </div>
       <Dropdown
         class="dropdown"
@@ -103,6 +120,7 @@ export default {
     sort(evt) {
       const param = evt.target.value
       this.$store.dispatch('table/sortTable', { data: param })
+      this.$emit('sort', param)
     },
     setRange(evt) {
       const range = evt.target.value
@@ -173,8 +191,8 @@ export default {
 
 <style lang="scss" scoped>
 .toolbar {
-  font-size: $font-size;
-  line-height: $line-height;
+  padding: 16px 0;
+  @extend %font;
   display: flex;
   justify-content: space-between;
   &__group {
@@ -194,8 +212,18 @@ export default {
       border: 1px solid #c6cbd4;
     }
   }
+  &__title {
+    font-weight: bold;
+    margin-right: 8px;
+  }
 }
 .pagination {
   display: flex;
+  align-items: center;
+  margin: 0 16px;
+
+  &__text {
+    margin: 0 8px;
+  }
 }
 </style>

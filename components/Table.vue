@@ -6,44 +6,66 @@
       :lastItem="table.length"
       :selected="selected"
       @change-page="resetChecks"
+      @sort="setActive"
     />
     <table class="table">
       <tr class="table__row table__row_type_heading">
         <th class="table__cell table__cell_type_heading">
           <Checkbox @check-change="selectAll" :checked="selectedAll" />
         </th>
-        <th
+        <TH
           class="table__cell table__cell_type_heading"
           v-if="getColumns.includes('product')"
-        >
-          Product (100g serving)
-        </th>
+          title="Product (100g serving)"
+          name="product"
+          :selected="active"
+        />
         <th
-          class="table__cell table__cell_type_heading"
+          :class="[
+            'table__cell',
+            'table__cell_type_heading',
+            { table__cell_active: active === 'calories' },
+          ]"
           v-if="getColumns.includes('calories')"
         >
           Calories
         </th>
         <th
-          class="table__cell table__cell_type_heading"
+          :class="[
+            'table__cell',
+            'table__cell_type_heading',
+            { table__cell_active: active === 'fat' },
+          ]"
           v-if="getColumns.includes('fat')"
         >
           Fat (g)
         </th>
         <th
-          class="table__cell table__cell_type_heading"
+          :class="[
+            'table__cell',
+            'table__cell_type_heading',
+            { table__cell_active: active === 'carbs' },
+          ]"
           v-if="getColumns.includes('carbs')"
         >
           Carbs (g)
         </th>
         <th
-          class="table__cell table__cell_type_heading"
+          :class="[
+            'table__cell',
+            'table__cell_type_heading',
+            { table__cell_active: active === 'protein' },
+          ]"
           v-if="getColumns.includes('protein')"
         >
           Protein (g)
         </th>
         <th
-          class="table__cell table__cell_type_heading"
+          :class="[
+            'table__cell',
+            'table__cell_type_heading',
+            { table__cell_active: active === 'iron' },
+          ]"
           v-if="getColumns.includes('iron')"
         >
           Iron (g)
@@ -81,6 +103,7 @@
 
 <script>
 import Radio from '@/components/ui/Radio'
+import TableHeading from '@/components/ui/TableHeading'
 import Checkbox from '@/components/ui/Checkbox'
 import Toolbar from '@/components/Toolbar'
 export default {
@@ -88,12 +111,14 @@ export default {
     Radio,
     Checkbox,
     Toolbar,
+    TH: TableHeading,
   },
   data() {
     return {
       dataToShow: [],
       selected: [],
       selectedAll: false,
+      active: 'product',
     }
   },
   props: ['table'],
@@ -123,6 +148,9 @@ export default {
       const rows = inputs.filter((el) => el.checked).map((el) => el.value)
       this.selectedAll = inputs.every((el) => el.checked)
       this.selected = rows
+    },
+    setActive(param) {
+      this.active = param
     },
     resetChecks() {
       this.selectedAll = false
@@ -172,8 +200,8 @@ export default {
 
 <style lang="scss" scoped>
 .table {
-  font-size: $font-size;
-  line-height: $line-height;
+  @extend %font;
+  color: $default-color;
   width: 100%;
   &__row {
     display: grid;
@@ -192,6 +220,12 @@ export default {
     text-align: center;
     &_type_button {
       visibility: hidden;
+    }
+    &_active {
+      color: $active-bg;
+    }
+    &_type_heading {
+      font-weight: 600px;
     }
   }
   &__row:hover &__cell_type_button {

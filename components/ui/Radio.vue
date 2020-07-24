@@ -26,9 +26,8 @@ export default {
 
 <style lang="scss">
 .radio {
+  @extend %font;
   &__text {
-    font-size: 14px;
-    line-height: 24px;
     padding: 8px;
     border-radius: 2px;
   }

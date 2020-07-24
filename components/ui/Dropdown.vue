@@ -43,8 +43,7 @@ export default {
 
 <style lang="scss" scoped>
 .dropdown {
-  font-size: $font-size;
-  line-height: $line-height;
+  @extend %font;
   position: relative;
   &__list {
     width: 100%;

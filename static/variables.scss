@@ -2,3 +2,13 @@ $active-bg:#00A11E;
 $active-color:#fff;
 $font-size: 14px;
 $line-height: 14px;
+$default-color: #282136;
+
+%active {
+  color: $active-color;  
+  background-color: $active-bg;
+}
+%font {
+  font-size: $font-size;
+  line-height: $line-height;
+}
