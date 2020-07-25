@@ -129,6 +129,7 @@ export default {
     },
     sort(evt) {
       const param = evt.target.value
+      this.active = param
       this.$store.dispatch('table/sortTable', { data: param })
       this.$emit('sort', param)
     },
