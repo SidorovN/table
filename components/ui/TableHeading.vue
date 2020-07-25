@@ -1,8 +1,11 @@
 <template>
-  <th v-if="visible">
+  <th v-if="visible" :class="['heading', { heading_active: active }]">
     <button
       @click="reverseTable"
-      :class="['heading', { heading_active: active, heading_down: down }]"
+      :class="[
+        'heading__button',
+        { heading__button_active: active, heading__button_down: down },
+      ]"
       :disabled="!active"
     >
       <span>{{ title }}</span>
@@ -42,35 +45,40 @@ export default {
 
 <style lang="scss" scoped>
 .heading {
-  padding: 0;
-  @extend %font;
-  position: relative;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  font-weight: 600;
-  padding-right: 20px;
   &_active {
-    cursor: pointer;
-    color: $active-bg;
-    &:after {
-      position: absolute;
-      content: '';
-      top: 3px;
-      right: 0;
-      height: 17px;
-      width: 16px;
-      background-image: url('/images/sort.svg');
-      background-repeat: no-repeat;
-      background-position: center;
+    grid-column-start: 2;
+  }
+  &__button {
+    padding: 0;
+    @extend %font;
+    position: relative;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-weight: 600;
+    padding-right: 20px;
+    &_active {
+      cursor: pointer;
+      color: $active-bg;
+      &:after {
+        position: absolute;
+        content: '';
+        top: 3px;
+        right: 0;
+        height: 17px;
+        width: 16px;
+        background-image: url('/images/sort.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+      }
     }
-  }
-  &_down:after {
-    transform: rotate(180deg);
-  }
+    &_down:after {
+      transform: rotate(180deg);
+    }
 
-  &:disabled {
-    color: inherit;
+    &:disabled {
+      color: inherit;
+    }
   }
 }
 </style>
