@@ -124,8 +124,9 @@ body {
   }
 }
 .container {
-  min-width: 100vw;
-  min-height: 100vh;
+  margin: 0 auto;
+  min-width: 90vw;
+  min-height: 90vh;
   display: block;
 }
 .error {
