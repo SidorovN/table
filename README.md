@@ -1,4 +1,15 @@
 # table
+Тестовое задание. Проект представляет из себя компонент таблицы для Vue.js
+## Посмотреть можно по ссылке
+https://idaproject-table.herokuapp.com/
+
+## Стек технологий
+* HTML
+* SCSS
+* JS
+* Vue.js
+* Vuex
+* Nuxt.js
 
 ## Build Setup
 

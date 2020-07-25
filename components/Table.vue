@@ -40,6 +40,7 @@
             :visible="getColumns.find((el) => el.name === column.name).visible"
             :title="row[column.name]"
             :name="column.name"
+            :selected="active"
           />
           <td class="table__cell table__cell_type_button">
             <button @click="showPopup" :value="+row.id" class="table__button">
@@ -218,6 +219,7 @@ export default {
   &__row {
     display: grid;
     grid-template-columns: 80px 200px repeat(6, minmax(50px, 1fr));
+    grid-template-rows: 50px;
     align-items: center;
     min-height: 50px;
     &_type_heading {
@@ -233,6 +235,7 @@ export default {
     }
   }
   &__cell {
+    grid-row: 1;
     text-align: left;
     &_type_button {
       position: relative;
