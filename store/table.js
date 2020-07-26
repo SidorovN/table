@@ -90,9 +90,7 @@ export const mutations = {
     state.table = data.table
   },
   setError(state, error) {
-    console.log(error)
     state.error = error
-    console.log(state.error)
   },
   setLoading(state, data) {
     state.loading = data
