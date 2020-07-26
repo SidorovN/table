@@ -112,7 +112,7 @@ export default {
     Dropdown,
     Popup,
   },
-  props: ['totalItems', 'firstItem', 'lastItem', 'selected'],
+  props: ['selected'],
   data() {
     return {
       selectAll: true,
@@ -126,8 +126,15 @@ export default {
       const columns = inputs.filter((el) => el.checked).map((el) => el.value)
       this.selectAll = inputs.every((el) => el.checked)
       this.$store.dispatch('table/setColumns', { columns })
+
+      this.active = this.getColumns.find((el) => el.name == this.active).visible
+        ? this.active
+        : this.getColumns.find((el) => el.visible).name
+      this.$store.dispatch('table/sortTable', { data: this.active })
+      this.$emit('sort', this.active)
     },
     sort(evt) {
+      evt.preventDefault()
       const param = evt.target.value
       this.active = param
       this.$store.dispatch('table/sortTable', { data: param })
@@ -186,7 +193,6 @@ export default {
         .finally((res) => {
           this.$store.dispatch('table/setLoading', false)
         })
-      console.log(this.$store.getters['table/getLoading'])
     },
     resetDelete() {
       this.$store.dispatch('table/setError', false)
@@ -199,7 +205,6 @@ export default {
   computed: {
     getFirst() {
       const { table } = this.$store.state
-      console.log(table)
       return table.pagination.first
     },
     getRange() {

@@ -2,9 +2,6 @@
   <section class="section">
     <h1 class="section__title">Table UI</h1>
     <Toolbar
-      :totalItems="table.length"
-      :firstItem="1"
-      :lastItem="table.length"
       :selected="selected"
       @change-page="resetChecks"
       @sort="setActive"
